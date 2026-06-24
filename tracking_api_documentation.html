@@ -1,0 +1,2910 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transportation & Real-Time Tracking API Documentation</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Mermaid Diagram Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+  </script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    pre,
+    code {
+      font-family: 'Fira Code', monospace;
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(241, 245, 249, 1);
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(203, 213, 225, 1);
+      border-radius: 4px;
+    }
+
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50/50 text-slate-800 antialiased min-h-screen">
+
+  <!-- Navigation bar -->
+  <nav class="sticky top-0 z-50 glass-nav py-4 px-6 md:px-12 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div
+        class="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-200">
+        <i class="fa-solid fa-truck-fast text-lg"></i>
+      </div>
+      <div>
+        <h1 class="text-md font-bold tracking-tight text-slate-900">HealthFleet</h1>
+        <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Developer Portal</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <span
+        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
+        <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        API v1.0 Live
+      </span>
+    </div>
+  </nav>
+
+  <div class="max-w-7xl mx-auto px-6 md:px-12 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+    <!-- Sidebar Navigation -->
+    <aside class="lg:col-span-1 lg:sticky lg:top-28 h-fit space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <h3 class="font-bold text-xs uppercase text-slate-400 tracking-wider">Documentation Index</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a href="#overview"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors font-medium">
+              <i class="fa-solid fa-compass text-slate-400 text-sm"></i>
+              System Overview
+            </a>
+          </li>
+          <li>
+            <a href="#socket-telemetry"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors font-medium">
+              <i class="fa-solid fa-network-wired text-slate-400 text-sm"></i>
+              Socket.IO Telemetry
+            </a>
+          </li>
+          <li>
+            <a href="#rest-endpoints"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors font-medium">
+              <i class="fa-solid fa-code text-slate-400 text-sm"></i>
+              HTTP REST Endpoints
+            </a>
+          </li>
+          <li>
+            <a href="#workflow"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors font-medium">
+              <i class="fa-solid fa-diagram-project text-slate-400 text-sm"></i>
+              App Integration Flow
+            </a>
+          </li>
+          <li>
+            <a href="#ride-lifecycle"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors font-medium">
+              <i class="fa-solid fa-route text-slate-400 text-sm"></i>
+              Ride Lifecycle Flow
+            </a>
+          </li>
+          <li>
+            <a href="#testing-no-auth"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-amber-600 hover:text-amber-700 hover:bg-amber-50/70 transition-colors font-medium">
+              <i class="fa-solid fa-flask text-amber-400 text-sm"></i>
+              Testing / No-Auth Mode
+            </a>
+          </li>
+          <li>
+            <a href="#patient-api"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors font-medium">
+              <i class="fa-solid fa-user-injured text-slate-400 text-sm"></i>
+              Patient API
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="lg:col-span-3 space-y-12">
+
+      <!-- Intro Section -->
+      <section id="intro"
+        class="bg-gradient-to-tr from-indigo-900 to-slate-900 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 space-y-4 max-w-2xl">
+          <span
+            class="bg-indigo-500/30 border border-indigo-400/30 text-indigo-200 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase">Integration
+            Guide</span>
+          <h2 class="text-3xl font-extrabold tracking-tight">Transportation & Real-Time Tracking</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Welcome to the live tracking developers portal. This guide details REST APIs, dynamic Socket.IO routing
+            event cycles, and rules configured for passenger-driver live telemetry.
+          </p>
+        </div>
+        <!-- Background light sphere -->
+        <div class="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
+      </section>
+
+      <!-- Section 1: Overview -->
+      <section id="overview" class="space-y-6">
+        <div class="border-b border-slate-200 pb-4">
+          <h3 class="text-2xl font-bold tracking-tight text-slate-900">1. System Overview</h3>
+          <p class="text-slate-500 text-xs mt-1">Architecture and real-time streaming components</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-2">
+            <div class="h-8 w-8 bg-sky-50 text-sky-600 rounded-lg flex items-center justify-center font-bold">HTTP</div>
+            <h4 class="font-semibold text-slate-800">REST Controller</h4>
+            <p class="text-slate-500 text-xs">Exposes endpoints for fleet setup, patient booking generation, trip start
+              verification, and dispatch controls.</p>
+          </div>
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-2">
+            <div class="h-8 w-8 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center font-bold">IO
+            </div>
+            <h4 class="font-semibold text-slate-800">Socket.IO Core</h4>
+            <p class="text-slate-500 text-xs">Handles high-concurrency GPS ingestion stream, rooms connection hooks, and
+              passenger coordinate broadcasts.</p>
+          </div>
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-2">
+            <div class="h-8 w-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center font-bold">DB
+            </div>
+            <h4 class="font-semibold text-slate-800">Redis & Prisma</h4>
+            <p class="text-slate-500 text-xs">Keeps current asset coordinates and vehicle availability states
+              synchronized in low-latency memory.</p>
+          </div>
+        </div>
+
+        <!-- Mermaid Sequence Diagram Card -->
+        <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4">
+          <h4 class="font-semibold text-sm text-slate-700 uppercase tracking-wider">End-to-End Ride & Telemetry Event
+            Sequence</h4>
+          <div class="flex justify-center p-4 bg-slate-50 rounded-xl overflow-x-auto custom-scroll">
+            <div class="mermaid">
+              sequenceDiagram
+              autonumber
+              actor Passenger as Passenger App
+              participant Backend as Backend (HTTP/REST)
+              participant Socket as Socket.IO Server
+              actor Driver as Driver App
+
+              Note over Passenger, Driver: Phase 1: Ride Booking & Automatic Dispatch
+              Passenger->>Backend: POST /vehicle/bookings (Create booking)
+              activate Backend
+              Backend->>Backend: Query available vehicles & drivers (10km radius)
+              Backend-->>Passenger: Returns bookingId
+              deactivate Backend
+
+              Backend->>Socket: Broadcast "newRideRequest" to nearby drivers
+              Socket->>Driver: newRideRequest event (Popup incoming request)
+
+              Note over Passenger, Driver: Phase 2: Driver Acceptance & Socket Binding
+              Driver->>Backend: POST /vehicle/bookings/:bookingId/accept (Accept ride)
+              Backend-->>Passenger: Status transitions to ASSIGNED / ACCEPTED
+              Passenger->>Socket: subscribeTripRoom (Join trip_room:bookingId)
+
+              Note over Passenger, Driver: Phase 3: Passenger Pickup & OTP Verification
+              Driver->>Passenger: Driver arrives at pickup. Passenger provides 6-digit OTP.
+              Driver->>Backend: POST /vehicle/bookings/:bookingId/verify { verificationCode }
+              Backend-->>Passenger: Status transitions to IN_PROGRESS (Trip Starts)
+
+              Note over Passenger, Driver: Phase 4: In-Trip Telemetry (5s Interval Loop)
+              loop Telemetry Update Loop
+              Driver->>Socket: emitTelemetryUpdate { driverId, tripId, lat, lng }
+              Socket->>Socket: Ingest & filter by movement thresholds (20m / 5s)
+              Socket->>Passenger: telemetryUpdate { latitude, longitude, timestamp }
+              Note over Passenger: Reposition vehicle icon smoothly on map
+              end
+
+              Note over Passenger, Driver: Phase 5: Trip Completion & Billing
+              Driver->>Backend: POST /trips/:bookingId/complete { distance, duration }
+              Backend-->>Passenger: Status transitions to COMPLETED (Show invoice/receipt)
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Socket.IO Telemetry -->
+      <section id="socket-telemetry" class="space-y-6">
+        <div class="border-b border-slate-200 pb-4">
+          <h3 class="text-2xl font-bold tracking-tight text-slate-900">2. Real-Time Telemetry via Socket.IO</h3>
+          <p class="text-slate-500 text-xs mt-1">Socket events description and payload specs</p>
+        </div>
+        <div class="space-y-6">
+
+          <!-- Connection Handshake (Driver Joining driver_room) -->
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-violet-100 text-violet-700">DRIVER
+                  CONN</span>
+                <span class="font-mono font-semibold text-sm">Driver Connection & Handshake</span>
+              </div>
+              <span class="text-slate-400 text-xs">Query Handshake</span>
+            </div>
+            <div class="p-5 space-y-3 text-sm">
+              <p class="text-slate-600 text-xs">To receive incoming ride dispatches, the **Driver App** must pass its
+                encrypted driver profile ID as a query parameter during the socket handshake. The server automatically
+                decrypts the ID and adds the driver socket to their private room: <code
+                  class="bg-slate-100 px-1 py-0.5 rounded text-rose-600 font-mono">driver_room:&lt;decryptedDriverId&gt;</code>.
+              </p>
+              <pre class="bg-slate-900 text-indigo-300 p-4 rounded-xl text-xs overflow-x-auto custom-scroll">// 1. Driver App Connection Handshake
+const socket = io("http://localhost:5000", {
+  query: {
+    driverId: "drv_WtA2bsgxL5enW2136A9sezEc..." // Encrypted driver public ID
+  }
+});
+
+// 2. Server implementation (socket.ts)
+// const driverId = socket.handshake.query.driverId;
+// const rawDriverId = decryptPublicId(driverId);
+// socket.join(`driver_room:${rawDriverId}`);</pre>
+            </div>
+          </div>
+
+          <!-- subscribeTripRoom (User/Passenger Joining trip_room) -->
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-blue-100 text-blue-700">USER
+                  SUB</span>
+                <span class="font-mono font-semibold text-sm">subscribeTripRoom</span>
+              </div>
+              <span class="text-slate-400 text-xs">Inbound Socket Event</span>
+            </div>
+            <div class="p-5 space-y-3 text-sm">
+              <p class="text-slate-600 text-xs">To receive real-time telemetry updates for an assigned vehicle, the
+                **Passenger App** connects to the socket server (without query params) and emits
+                <code>subscribeTripRoom</code> passing the encrypted <code>tripId</code> (the booking master ID). The
+                server subscribes the socket to <code
+                  class="bg-slate-100 px-1 py-0.5 rounded text-rose-600 font-mono">trip_room:&lt;tripId&gt;</code>.</p>
+              <pre class="bg-slate-900 text-indigo-300 p-4 rounded-xl text-xs overflow-x-auto custom-scroll">// 1. Passenger App Connection
+const socket = io("http://localhost:5000");
+
+// 2. Join telemetry stream for an active booking
+socket.emit("subscribeTripRoom", {
+  tripId: "bkm_S4fIR4U92p6SEc_XBx..." // Encrypted Booking Master ID
+});
+
+// 3. Listen to joining status
+socket.on("subscribed", (status) => {
+  console.log("Subscribed successfully to:", status.room); // trip_room:bkm_S4fIR4U92...
+});</pre>
+            </div>
+          </div>
+
+          <!-- join Event (General Room Joining) -->
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-blue-100 text-blue-700">JOIN</span>
+                <span class="font-mono font-semibold text-sm">join</span>
+              </div>
+              <span class="text-slate-400 text-xs font-medium">Inbound Socket Event</span>
+            </div>
+            <div class="p-5 space-y-3 text-sm">
+              <p class="text-slate-600 text-xs">Allows any client to explicitly join any custom named room for custom
+                broadcast topics.</p>
+              <pre class="bg-slate-900 text-indigo-300 p-4 rounded-xl text-xs overflow-x-auto custom-scroll">// Join a general custom room
+socket.emit("join", {
+  room: "notification_alerts"
+});</pre>
+            </div>
+          </div>
+
+          <!-- emitTelemetryUpdate -->
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span
+                  class="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-amber-100 text-amber-700">EMIT</span>
+                <span class="font-mono font-semibold text-sm">emitTelemetryUpdate</span>
+              </div>
+              <span class="text-slate-400 text-xs">Inbound Event</span>
+            </div>
+            <div class="p-5 space-y-4 text-sm">
+              <p class="text-slate-600 text-xs">Emitted by the **Driver App** to feed real-time coordinates. The backend
+                checks movement rules before executing database updates.</p>
+
+              <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-xs text-indigo-800 space-y-2">
+                <p class="font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-exclamation"></i>
+                  Telemetry Ingestion Ruleset:</p>
+                <ul class="list-disc list-inside space-y-1 text-[11px] pl-1">
+                  <li>Ingested immediately if it is the driver's first packet.</li>
+                  <li>Saves/broadcasts if elapsed time >= <strong>5 seconds</strong>.</li>
+                  <li>Saves/broadcasts if linear offset movement is >= <strong>20 meters</strong> (approx. 0.00018
+                    degrees).</li>
+                </ul>
+              </div>
+
+              <pre class="bg-slate-900 text-indigo-300 p-4 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "driverId": "string (Encrypted Driver Profile Public ID)",
+  "tripId": "string (Encrypted Booking Master Public ID)",
+  "lat": 12.9716,
+  "lng": 77.5946
+}</pre>
+            </div>
+          </div>
+
+          <!-- telemetryUpdate Broadcast -->
+          <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="bg-slate-50 border-b border-slate-200 px-5 py-3.5 flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <span
+                  class="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-emerald-100 text-emerald-700">BROADCAST</span>
+                <span class="font-mono font-semibold text-sm">telemetryUpdate</span>
+              </div>
+              <span class="text-slate-400 text-xs">Outbound Event</span>
+            </div>
+            <div class="p-5 space-y-3 text-sm">
+              <p class="text-slate-600 text-xs">Broadcasted by the server to all users in the corresponding `trip_room:
+                <tripId>` room.</p>
+              <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "driverId": "string (Encrypted Driver Public ID)",
+  "tripId": "string (Encrypted Booking Master ID)",
+  "latitude": 12.9716,
+  "longitude": 77.5946,
+  "timestamp": "2026-06-08T11:00:00.000Z"
+}</pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 3: REST Endpoints -->
+      <section id="rest-endpoints" class="space-y-6">
+        <div class="border-b border-slate-200 pb-4">
+          <h3 class="text-2xl font-bold tracking-tight text-slate-900">3. HTTP REST API Reference</h3>
+          <p class="text-slate-500 text-xs mt-1">Control endpoints for bookings, fleet management, and simulation steps
+          </p>
+        </div>
+
+        <div class="space-y-4">
+
+          <!-- POST /auth/register -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/auth/register</span>
+            </div>
+            <p class="text-slate-500 text-xs">Register a new user account in the system. To create a driver user,
+              specify <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-rose-600 font-semibold">"role": "DRIVER"</code>.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "email": "driver@hospital.com",
+  "password": "Password123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+919999999999",
+  "role": "DRIVER"
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (201 Created)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Registration successful",
+  "code": "REGISTER_SUCCESS",
+  "locale": "en",
+  "fallbackUsed": false,
+  "data": {
+    "user": {
+      "publicId": "2p1qahkp1kfho7s2UgmHRTDirfhv3bv6zCV3170q9aG9oKXQPSHJWlwgQTx4EjC3J2zyT1ZvR1KG",
+      "email": "driver_7nhy@test.com",
+      "firstName": "Test",
+      "lastName": "Driver",
+      "role": "DRIVER",
+      "organization": null
+    },
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMSIsInB1YmxpY0lkIjoiVDhrbi1ubTV3eGxiQy1nTVRJbVVLbXdkNU5OM0xxVjZTY0lZdXMycFk1QmtybEdyMWJIUVk5YUJTSEdCVDZrM2ZSakh2cG5sdE9VTiIsIm9yZ2FuaXphdGlvbklkIjpudWxsLCJyb2xlIjoiRFJJVkVSIiwiaWF0IjoxNzgxNzYzNTQzLCJleHAiOjE3ODE4NDk5NDN9.nySXkksMDKbNOFAKDOL9d2e_wQrPRqiJZvvRT4CD268",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMSIsInB1YmxpY0lkIjoiVDhrbi1ubTV3eGxiQy1nTVRJbVVLbXdkNU5OM0xxVjZTY0lZdXMycFk1QmtybEdyMWJIUVk5YUJTSEdCVDZrM2ZSakh2cG5sdE9VTiIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzgxNzYzNTQzLCJleHAiOjE3ODIzNjgzNDN9.FF88xTpaf5pyXm5BGdhJ3H9KrNXQq9vGUhhht9nbJhw"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /vehicles -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicles</span>
+            </div>
+            <p class="text-slate-500 text-xs">Register a new vehicle asset. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "vehicleNumber": "KA-01-AB-1234",
+  "vehicleType": "BASIC", // BASIC | ADVANCED | ICU
+  "vehicleCategoryId": "string (Encrypted Category Public ID)",
+  "modelName": "Force Traveller 3350",
+  "latitude": 12.9716, // optional
+  "longitude": 77.5946 // optional
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (201 Created)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicle registered successfully",
+  "data": {
+    "id": "amb_S4fIR4U92p6SEc_XBx...",
+    "vehicleNumber": "KA-01-AB-1234",
+    "vehicleType": "BASIC",
+    "modelName": "Force Traveller 3350",
+    "vehicleCategoryId": "vcat_S4fIR4U92p6...",
+    "isActive": true,
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- GET /vehicles -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicles</span>
+            </div>
+            <p class="text-slate-500 text-xs">Fetch list of all registered vehicle assets along with active driver
+              assignments. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicles retrieved successfully",
+  "data": {
+    "data": [
+      {
+        "id": "amb_S4fIR4U92p6SEc_XBx...",
+        "vehicleNumber": "KA-01-AB-1234",
+        "vehicleType": "BASIC",
+        "modelName": "Force Traveller 3350",
+        "vehicleCategoryId": "vcat_S4fIR4U92p6...",
+        "vehicleCategoryName": "Basic Life Support",
+        "isActive": true,
+        "latitude": 12.9716,
+        "longitude": 77.5946,
+        "make": "Force",
+        "model": "Traveller 3350",
+        "insuranceExpiryDate": "15-12-2026",
+        "verificationStatus": "APPROVED",
+        "assignedDriver": {
+          "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+          "name": "John Doe",
+          "phone": "+919999999999"
+        },
+        "createdAt": "2026-06-08T11:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "total": 1,
+      "page": 1,
+      "limit": 10,
+      "totalPages": 1
+    }
+  }
+}</pre>
+          </div>
+
+          <!-- GET /vehicles/:id -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicles/:id</span>
+            </div>
+            <p class="text-slate-500 text-xs">Retrieve full details of a specific vehicle asset including registration
+              information and assigned driver. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicle details retrieved successfully",
+  "data": {
+    "id": "amb_S4fIR4U92p6SEc_XBx...",
+    "vehicleNumber": "KA-01-AB-1234",
+    "vehicleType": "BASIC",
+    "modelName": "Force Traveller 3350",
+    "vehicleCategoryId": "vcat_S4fIR4U92p6...",
+    "vehicleCategoryCode": "BLS",
+    "isActive": true,
+    "latitude": 12.9716,
+    "longitude": 77.5946,
+    "make": "Force",
+    "model": "Traveller 3350",
+    "insuranceExpiryDate": "15-12-2026",
+    "verificationStatus": "APPROVED",
+    "assignedDriver": {
+      "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+          </div>
+
+          <!-- PUT /vehicles/:id -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PUT</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicles/:id</span>
+            </div>
+            <p class="text-slate-500 text-xs">Update registration details, active status, or category assignment for a
+              vehicle. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "vehicleNumber": "KA-01-AB-1234",
+  "vehicleType": "BASIC",
+  "modelName": "Force Traveller 3350",
+  "make": "Force",
+  "model": "Traveller 3350",
+  "insuranceExpiryDate": "15-12-2026", // format dd-mm-yyyy
+  "isActive": true,
+  "verificationStatus": "APPROVED",
+  "vehicleCategoryId": "vcat_S4fIR4U92p6..."
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicle details updated successfully",
+  "data": {
+    "id": "amb_S4fIR4U92p6SEc_XBx...",
+    "vehicleNumber": "KA-01-AB-1234",
+    "vehicleType": "BASIC",
+    "modelName": "Force Traveller 3350",
+    "vehicleCategoryId": "vcat_S4fIR4U92p6...",
+    "vehicleCategoryCode": "BLS",
+    "isActive": true,
+    "make": "Force",
+    "model": "Traveller 3350",
+    "insuranceExpiryDate": "15-12-2026",
+    "verificationStatus": "APPROVED"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- PATCH /vehicles/:id/approve -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-violet-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PATCH</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicles/:id/approve</span>
+            </div>
+            <p class="text-slate-500 text-xs">Approve a registered vehicle asset. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicle approved successfully",
+  "data": {
+    "id": "amb_S4fIR4U92p6SEc_XBx...",
+    "vehicleNumber": "KA-01-AB-1234",
+    "verificationStatus": "APPROVED"
+  }
+}</pre>
+          </div>
+
+          <!-- PATCH /vehicles/:id/reject -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-violet-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PATCH</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicles/:id/reject</span>
+            </div>
+            <p class="text-slate-500 text-xs">Reject a registered vehicle asset. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicle rejected successfully",
+  "data": {
+    "id": "amb_S4fIR4U92p6SEc_XBx...",
+    "vehicleNumber": "KA-01-AB-1234",
+    "verificationStatus": "REJECTED"
+  }
+}</pre>
+          </div>
+
+          <!-- POST /drivers -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers</span>
+            </div>
+            <p class="text-slate-500 text-xs">Register a new driver profile associated with a user account. Requires
+              <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "userId": "string (Encrypted User Public ID)",
+  "licenseNumber": "string (License number string)"
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (201 Created)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver registered successfully",
+  "data": {
+    "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+    "name": "John Doe",
+    "email": "driver@hospital.com",
+    "phone": "+919999999999",
+    "licenseNumber": "DL-1234567890",
+    "isAvailable": true,
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- GET /drivers -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers</span>
+            </div>
+            <p class="text-slate-500 text-xs">Fetch list of registered driver profiles (returns public IDs starting with
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-rose-600">drv_</code>). Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Drivers retrieved successfully",
+  "data": {
+    "data": [
+      {
+        "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+        "name": "John Doe",
+        "email": "driver@hospital.com",
+        "phone": "+919999999999",
+        "licenseNumber": "DL-1234567890",
+        "verificationStatus": "APPROVED",
+        "isOnline": true,
+        "isActive": true,
+        "currentStatus": "IDLE",
+        "createdAt": "2026-06-08T11:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "total": 1,
+      "page": 1,
+      "limit": 10,
+      "totalPages": 1
+    }
+  }
+}</pre>
+          </div>
+
+          <!-- GET /drivers/:id -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers/:id</span>
+            </div>
+            <p class="text-slate-500 text-xs">Retrieve full details of a specific driver profile including assigned
+              vehicles, verification status, and online status. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver details retrieved successfully",
+  "data": {
+    "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+    "name": "John Doe",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "driver@hospital.com",
+    "phone": "+919999999999",
+    "licenseNumber": "DL-1234567890",
+    "verificationStatus": "APPROVED",
+    "isOnline": true,
+    "isActive": true,
+    "currentStatus": "IDLE",
+    "assignedVehicles": [
+      {
+        "id": "amb_S4fIR4U92p6SEc_XBx...",
+        "vehicleNumber": "KA-01-AB-1234",
+        "vehicleType": "BASIC",
+        "make": "Force",
+        "model": "Traveller 3350",
+        "isActive": true,
+        "verificationStatus": "APPROVED",
+        "assignedAt": "2026-06-08T11:00:00.000Z",
+        "unassignedAt": null
+      }
+    ],
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+          </div>
+
+          <!-- PUT /drivers/:id -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PUT</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers/:id</span>
+            </div>
+            <p class="text-slate-500 text-xs">Update driver profile user details, license number, or active status.
+              Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "driver@hospital.com",
+  "phone": "+919999999999",
+  "licenseNumber": "DL-1234567890",
+  "isActive": true,
+  "verificationStatus": "APPROVED",
+  "isOnline": true
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver details updated successfully",
+  "data": {
+    "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+    "name": "John Doe",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "driver@hospital.com",
+    "phone": "+919999999999",
+    "licenseNumber": "DL-1234567890",
+    "verificationStatus": "APPROVED",
+    "isActive": true,
+    "isOnline": true,
+    "currentStatus": "IDLE"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- PATCH /drivers/:id/approve -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-violet-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PATCH</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers/:id/approve</span>
+            </div>
+            <p class="text-slate-500 text-xs">Approve a driver's profile verification. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver approved successfully",
+  "data": {
+    "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+    "licenseNumber": "DL-1234567890",
+    "verificationStatus": "APPROVED"
+  }
+}</pre>
+          </div>
+
+          <!-- PATCH /drivers/:id/reject -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-violet-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PATCH</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers/:id/reject</span>
+            </div>
+            <p class="text-slate-500 text-xs">Reject a driver's profile verification. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver rejected successfully",
+  "data": {
+    "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+    "licenseNumber": "DL-1234567890",
+    "verificationStatus": "REJECTED"
+  }
+}</pre>
+          </div>
+
+          <!-- PATCH /drivers/:id/active -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-violet-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PATCH</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers/:id/active</span>
+            </div>
+            <p class="text-slate-500 text-xs">Toggle a driver profile active status. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "isActive": true
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver active status toggled successfully",
+  "data": {
+    "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+    "isActive": true
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- PATCH /drivers/online -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-violet-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PATCH</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/drivers/online</span>
+            </div>
+            <p class="text-slate-500 text-xs">Toggle the authenticated driver's online/offline status. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-rose-600 font-semibold">DRIVER</code> role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "isOnline": true
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver online status updated successfully",
+  "data": {
+    "isOnline": true,
+    "currentStatus": "IDLE"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /vehicles/:vehicleId/assign-driver -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span
+                class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicles/:vehicleId/assign-driver</span>
+            </div>
+            <p class="text-slate-500 text-xs">Assign a driver profile (public ID) to a vehicle asset. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "driverPublicId": "drv_WtA2bsgxL5enW2136A9sezEc..."
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Driver assigned successfully",
+  "data": {
+    "id": "asgn_WtA2bsgxL...",
+    "vehicle": {
+      "id": "amb_S4fIR4U92...",
+      "vehicleNumber": "KA-01-AB-1234"
+    },
+    "driver": {
+      "id": "drv_WtA2bsgxL...",
+      "name": "John Doe"
+    },
+    "assignedAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /vehicle/availability -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle/availability</span>
+            </div>
+            <p class="text-slate-500 text-xs">Check vehicle availability and estimated arrival time near specific
+              lat/lng coordinates.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "pickupLat": 12.9716, // optional
+  "pickupLng": 77.5946, // optional
+  "vehicleType": "BASIC" // BASIC | ADVANCED | ICU (optional)
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Availability checked successfully",
+  "data": {
+    "available": true,
+    "count": 1,
+    "vehicles": [
+      {
+        "id": "amb_S4fIR4U92p6SEc_XBx...",
+        "vehicleNumber": "KA-01-AB-1234",
+        "vehicleType": "BASIC",
+        "driver": {
+          "name": "John Doe",
+          "phone": "+919999999999"
+        },
+        "estimatedArrivalMinutes": 15
+      }
+    ]
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- GET /vehicle-categories -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle-categories</span>
+            </div>
+            <p class="text-slate-500 text-xs">Fetch list of active vehicle categories with base fare, per kilometer
+              rate, and minimum fare configurations.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicle categories retrieved successfully",
+  "data": [
+    {
+      "id": "vcat_S4fIR4U92p6...",
+      "name": "Basic Life Support",
+      "code": "BLS",
+      "pricing": {
+        "baseFare": 100,
+        "perKmRate": 15,
+        "minimumFare": 120
+      }
+    }
+  ]
+}</pre>
+          </div>
+
+          <!-- PATCH /vehicle-categories/:id/pricing -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-violet-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">PATCH</span>
+              <span
+                class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle-categories/:id/pricing</span>
+            </div>
+            <p class="text-slate-500 text-xs">Update pricing configurations (base fare, per km rate, minimum fare) for a
+              specific vehicle category. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "baseFare": 120,
+  "perKmRate": 18,
+  "minimumFare": 150
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Pricing updated successfully",
+  "data": {
+    "categoryId": "vcat_S4fIR4U92p6...",
+    "baseFare": 120,
+    "perKmRate": 18,
+    "minimumFare": 150
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /requests/estimate -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/requests/estimate</span>
+            </div>
+            <p class="text-slate-500 text-xs">Calculate distance, duration, and price/fare estimation from pickup to
+              drop coordinates.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "vehicleCategoryId": "string (Encrypted Category Public ID)",
+  "pickupLat": 12.9716,
+  "pickupLng": 77.5946,
+  "dropLat": 12.9000,
+  "dropLng": 77.6000
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Fare estimation calculated successfully",
+  "data": {
+    "estimatedDistanceKm": 8.5,
+    "estimatedDurationMin": 22,
+    "baseFare": 100,
+    "perKmRate": 15,
+    "minimumFare": 120,
+    "estimatedTotalFare": 227.5
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /requests -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/requests</span>
+            </div>
+            <p class="text-slate-500 text-xs">Create a standard transportation request (immediate or scheduled) for a
+              patient with distance estimation and booking type. Supports booking for multiple patients; if a family
+              member or user public ID is passed in <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-rose-600 font-semibold">patientId</code>, the
+              system automatically resolves it to their corresponding patient database entity. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">USER</code> role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "patientId": "string (Optional Encrypted Patient, FamilyMember, or User Public ID)",
+  "userId": "string (Optional alias for patientId)",
+  "vehicleCategoryId": "string (Encrypted Category Public ID)",
+  "pickupAddress": "123 Main St, Bangalore",
+  "pickupLat": 12.9716,
+  "pickupLng": 77.5946,
+  "dropAddress": "456 Hospital Road, Bangalore",
+  "dropLat": 12.9000,
+  "dropLng": 77.6000,
+  "bookingType": "IMMEDIATE", // IMMEDIATE | SCHEDULED
+  "scheduledAt": null, // ISO timestamp if SCHEDULED
+  "appointmentId": "string (Optional Encrypted Appointment Public ID)",
+  "numberOfPatients": 1,
+  "notes": "Wheelchair patient"
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (201 Created)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Transportation request created successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92p6SEc_XBx...",
+    "rideBookingId": "abk_uK43ypkGAacO...",
+    "status": "REQUESTED",
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "bookingType": "IMMEDIATE",
+    "scheduledAt": null,
+    "pricingEstimation": {
+      "estimatedDistanceKm": 8.5,
+      "estimatedDurationMin": 22,
+      "baseFare": 100,
+      "perKmRate": 15,
+      "minimumFare": 120,
+      "estimatedTotalFare": 227.5,
+      "commissionAmount": 0.0,
+      "driverEarning": 227.5
+    },
+    "verificationCode": "123456",
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /vehicle/bookings -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle/bookings</span>
+            </div>
+            <p class="text-slate-500 text-xs">Create a new ride booking request. Once submitted, the system will
+              automatically search and broadcast the booking to nearby drivers (within 10km). Supports booking for
+              multiple patients; if a family member or user public ID is passed in <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-rose-600 font-semibold">patientId</code>, the
+              system automatically resolves it to their corresponding patient database entity.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "patientId": "string (Optional Encrypted Patient, FamilyMember, or User Public ID)",
+  "userId": "string (Optional alias for patientId)",
+  "emergencyType": "ACCIDENT | CARDIAC | BREATHING | INJURY | OTHER",
+  "pickupAddress": "123 Main St, Bangalore",
+  "pickupLat": 12.9716,
+  "pickupLng": 77.5946,
+  "dropAddress": "456 Hospital Road, Bangalore",
+  "dropLat": 12.9000,
+  "dropLng": 77.6000,
+  "numberOfPatients": 1,
+  "notes": "Patient requires oxygen support"
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (201 Created)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Ride booking request created successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92p6SEc_XBx...",
+    "rideBookingId": "abk_uK43ypkGAacO...",
+    "status": "REQUESTED",
+    "vehicleAssigned": false,
+    "emergencyType": "CARDIAC",
+    "numberOfPatients": 1,
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /bookings/:id/assign -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span
+                class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle/bookings/:bookingId/assign</span>
+            </div>
+            <p class="text-slate-500 text-xs">Manual Dispatch (Admin / System override): Connects a specific vehicle
+              asset to the ride booking. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "vehiclePublicId": "amb_S4fIR4U92p6SEc_XBx..."
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Vehicle assigned to booking successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92p6SEc...",
+    "rideBookingId": "abk_uK43ypkGAacO...",
+    "status": "ASSIGNED",
+    "vehicleAssigned": true,
+    "vehicle": {
+      "id": "amb_S4fIR4...",
+      "publicId": "amb_S4fIR4...",
+      "vehicleNumber": "KA-01-AB-1234",
+      "vehicleType": "BASIC",
+      "registrationNumber": "KA-01-AB-1234"
+    },
+    "driver": {
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "estimatedArrivalMinutes": 15,
+    "assignedAt": "2026-06-08T11:00:00.000Z",
+    "extendedCount": 0,
+    "startedAt": null,
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /bookings/:id/accept -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span
+                class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle/bookings/:bookingId/accept</span>
+            </div>
+            <p class="text-slate-500 text-xs">Driver accepts the assigned ride. Moves booking status from <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600">ASSIGNED</code> to <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-blue-600">ACCEPTED</code>. Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-rose-600 font-semibold">DRIVER</code> role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Booking accepted successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4...",
+    "rideBookingId": "abk_uK43...",
+    "status": "ACCEPTED",
+    "vehicleAssigned": true,
+    "vehicle": {
+      "id": "amb_S4fIR4...",
+      "publicId": "amb_S4fIR4...",
+      "vehicleNumber": "KA-01-AB-1234",
+      "vehicleType": "BASIC",
+      "registrationNumber": "KA-01-AB-1234"
+    },
+    "driver": {
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "estimatedArrivalMinutes": 15,
+    "assignedAt": "2026-06-08T11:00:00.000Z",
+    "extendedCount": 0,
+    "startedAt": null,
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+          </div>
+
+          <!-- POST /verify OTP (Start Trip) -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span
+                class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle/bookings/:bookingId/verify</span>
+            </div>
+            <p class="text-slate-500 text-xs">Driver inputs the 6-digit OTP provided by the passenger. Moves booking
+              status to <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-emerald-600 font-semibold">IN_PROGRESS</code>,
+              triggering active route timing.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "verificationCode": "123456"
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Booking verified successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4...",
+    "rideBookingId": "abk_uK43...",
+    "status": "IN_PROGRESS",
+    "vehicleAssigned": true,
+    "vehicle": {
+      "id": "amb_S4fIR4...",
+      "publicId": "amb_S4fIR4...",
+      "vehicleNumber": "KA-01-AB-1234",
+      "vehicleType": "BASIC",
+      "registrationNumber": "KA-01-AB-1234"
+    },
+    "driver": {
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "estimatedArrivalMinutes": 15,
+    "assignedAt": "2026-06-08T11:00:00.000Z",
+    "extendedCount": 0,
+    "startedAt": "2026-06-08T11:05:00.000Z",
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- POST /bookings/:id/extend -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span
+                class="font-mono font-bold text-slate-700">/api/v1/transportation/vehicle/bookings/:bookingId/extend</span>
+            </div>
+            <p class="text-slate-500 text-xs">Extend the ongoing ride booking (adds 15 minutes to ETA). Maximum 3
+              extensions allowed.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "reason": "Heavy traffic detour"
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Booking extended successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4...",
+    "rideBookingId": "abk_uK43...",
+    "status": "IN_PROGRESS",
+    "vehicleAssigned": true,
+    "vehicle": {
+      "id": "amb_S4fIR4...",
+      "publicId": "amb_S4fIR4...",
+      "vehicleNumber": "KA-01-AB-1234",
+      "vehicleType": "BASIC",
+      "registrationNumber": "KA-01-AB-1234"
+    },
+    "driver": {
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "estimatedArrivalMinutes": 30,
+    "assignedAt": "2026-06-08T11:00:00.000Z",
+    "extendedCount": 1,
+    "startedAt": "2026-06-08T11:05:00.000Z",
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- GET /bookings (Unified View) -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/bookings</span>
+            </div>
+            <p class="text-slate-500 text-xs">Fetch all unified ride booking logs associated with the logged-in user.
+            </p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Bookings retrieved successfully",
+  "data": [
+    {
+      "id": "bkm_S4fIR4U92p6SEc...",
+      "bookingType": "AMBULANCE",
+      "status": "ACTIVE",
+      "createdAt": "2026-06-08T11:00:00.000Z",
+      "details": {
+        "rideBookingId": "abk_uK43ypkGAacO...",
+        "status": "ASSIGNED",
+        "vehicleAssigned": true,
+        "emergencyType": "CARDIAC",
+        "numberOfPatients": 1,
+        "notes": "Patient requires oxygen support",
+        "patient": null,
+        "vehicle": {
+          "id": "amb_S4fIR4U92p6SEc_XBx...",
+          "vehicleNumber": "KA-01-AB-1234",
+          "vehicleType": "BASIC"
+        },
+        "driver": {
+          "id": "drv_WtA2bsgxL5enW2136A9sezEc...",
+          "name": "John Doe",
+          "phone": "+919999999999"
+        },
+        "pickupAddress": "123 Main St, Bangalore",
+        "dropAddress": "456 Hospital Road, Bangalore",
+        "verificationCode": "123456",
+        "estimatedArrivalMinutes": 15,
+        "assignedAt": "2026-06-08T11:00:00.000Z"
+      }
+    }
+  ]
+}</pre>
+          </div>
+
+          <!-- GET /eta -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/requests/:bookingId/eta</span>
+            </div>
+            <p class="text-slate-500 text-xs">Query remaining distance and time. Calculates values using the driver's
+              real-time coordinate coordinates stored in Redis cache.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "ETA retrieved successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92p6SEc...",
+    "rideBookingId": "abk_uK43ypkGAacO...",
+    "assignedVehicle": {
+      "vehicleNumber": "KA-01-MJ-9999",
+      "latitude": 12.9715,
+      "longitude": 77.5948
+    },
+    "remainingDistanceMeters": 1500,
+    "remainingDurationSeconds": 180,
+    "etaTimestamp": "2026-06-08T11:03:00.000Z"
+  }
+}</pre>
+          </div>
+
+          <!-- GET /trips/:id/details -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/trips/:bookingId/details</span>
+            </div>
+            <p class="text-slate-500 text-xs">Fetch full details of an active or completed trip, including vehicle
+              coordinates, driver contact info, and pricing breakdown.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Trip details retrieved successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4...",
+    "rideBookingId": "abk_uK43...",
+    "status": "IN_PROGRESS",
+    "vehicle": {
+      "id": "amb_WtA2...",
+      "name": "Ambulance 01",
+      "vehicleNumber": "KA-01-AB-1234",
+      "latitude": 12.9716,
+      "longitude": 77.5946
+    },
+    "driver": {
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "startedAt": "2026-06-08T11:05:00.000Z",
+    "pricing": {
+      "baseFare": 100,
+      "perKmRate": 15,
+      "minimumFare": 120,
+      "estimatedFare": 227.5
+    }
+  }
+}</pre>
+          </div>
+
+          <!-- POST /requests/:id/cancel -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/requests/:bookingId/cancel</span>
+            </div>
+            <p class="text-slate-500 text-xs">Cancel a ride booking request before it starts. Transitions status to
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-red-600 font-semibold">CANCELLED</code>.
+            </p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Transportation request cancelled successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92p6SEc...",
+    "rideBookingId": "abk_uK43ypkGAacO...",
+    "status": "CANCELLED"
+  }
+}</pre>
+          </div>
+
+          <!-- POST /trips/:id/complete -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">POST</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/trips/:bookingId/complete</span>
+            </div>
+            <p class="text-slate-500 text-xs">Driver completes the active ride. End of trip, generates billing invoice
+              calculations and marks the vehicle/driver status back to available.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-slate-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "actualDistanceKm": 8.5,
+  "actualDurationMin": 22
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Trip completed successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92...",
+    "rideBookingId": "abk_uK43yp...",
+    "status": "COMPLETED",
+    "startedAt": "2026-06-08T11:05:00.000Z",
+    "completedAt": "2026-06-08T11:27:00.000Z",
+    "actualDistanceKm": 8.5,
+    "actualDurationMin": 22,
+    "fareBreakdown": {
+      "baseFare": 100,
+      "perKmRate": 15,
+      "minimumFare": 120,
+      "totalFare": 227.5,
+      "commissionAmount": 0.0,
+      "driverEarning": 227.5
+    }
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- GET /admin/dashboard -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/admin/dashboard</span>
+            </div>
+            <p class="text-slate-500 text-xs">Retrieve overview statistics for the transportation system (total users,
+              total/active drivers, booking statuses, total revenue). Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Dashboard stats retrieved successfully",
+  "data": {
+    "totalUsers": 12,
+    "totalDrivers": 3,
+    "activeDrivers": 1,
+    "totalRides": 8,
+    "completedRides": 4,
+    "cancelledRides": 1,
+    "totalRevenue": 910.0
+  }
+}</pre>
+          </div>
+
+          <!-- GET /admin/bookings -->
+          <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-3">
+            <div class="flex items-center gap-2 text-xs">
+              <span class="bg-emerald-500 text-white font-bold px-2 py-0.5 rounded text-[10px]">GET</span>
+              <span class="font-mono font-bold text-slate-700">/api/v1/transportation/admin/bookings</span>
+            </div>
+            <p class="text-slate-500 text-xs">List all bookings across the platform with full paging and search support
+              (by address, patient name, or booking master ID). Requires <code
+                class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">SUPER_ADMIN</code> or
+              <code class="bg-slate-100 px-1 py-0.5 rounded text-[10px] text-indigo-600 font-semibold">ORG_ADMIN</code>
+              role.</p>
+            <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+            <pre class="bg-slate-900 text-emerald-300 p-3.5 rounded-xl text-xs overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Bookings retrieved successfully",
+  "data": {
+    "data": [
+      {
+        "id": "bkm_S4fIR4U92p6SEc...",
+        "rideBookingId": "abk_uK43yp...",
+        "status": "COMPLETED",
+        "vehicleAssigned": true,
+        "emergencyType": "CARDIAC",
+        "numberOfPatients": 1,
+        "notes": "Patient requires oxygen support",
+        "pickupAddress": "123 Main St, Bangalore",
+        "dropAddress": "456 Hospital Road, Bangalore",
+        "estimatedArrivalMinutes": 15,
+        "totalDistance": 8.5,
+        "totalDuration": 22,
+        "totalFare": 227.5,
+        "driverEarning": 227.5,
+        "verificationCode": "123456",
+        "createdAt": "2026-06-08T11:00:00.000Z",
+        "bookedBy": "Jane Doe",
+        "patient": {
+          "name": "Jane Doe"
+        },
+        "vehicle": {
+          "vehicleNumber": "KA-01-AB-1234",
+          "vehicleType": "BASIC"
+        },
+        "driver": {
+          "name": "John Doe",
+          "phone": "+919999999999"
+        }
+      }
+    ],
+    "pagination": {
+      "total": 1,
+      "page": 1,
+      "limit": 10,
+      "totalPages": 1
+    }
+  }
+}</pre>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 4: Workflow -->
+      <section id="workflow" class="space-y-6">
+        <div class="border-b border-slate-200 pb-4">
+          <h3 class="text-2xl font-bold tracking-tight text-slate-900">4. Integration Guide for the App Team</h3>
+          <p class="text-slate-500 text-xs mt-1">Recommended workflow details for developer integrations</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 space-y-4 text-sm">
+          <div class="relative pl-8 border-l border-slate-200 space-y-4">
+            <!-- Step 1 -->
+            <div class="relative">
+              <div
+                class="absolute -left-11 top-0.5 h-6 w-6 rounded-full bg-indigo-600 border-4 border-white shadow-sm flex items-center justify-center text-[10px] font-bold text-white">
+                1</div>
+              <h4 class="font-bold text-slate-800">Establish Socket Connections</h4>
+              <p class="text-slate-500 text-xs mt-1">Connect using <code
+                  class="bg-slate-100 px-1 py-0.5 rounded">socket.io-client</code> and store the reference. Passenger
+                apps should emit <code class="bg-slate-100 px-1 py-0.5 text-indigo-600 rounded">subscribeTripRoom</code>
+                with the relevant trip identifier.</p>
+            </div>
+            <!-- Step 2 -->
+            <div class="relative">
+              <div
+                class="absolute -left-11 top-0.5 h-6 w-6 rounded-full bg-indigo-600 border-4 border-white shadow-sm flex items-center justify-center text-[10px] font-bold text-white">
+                2</div>
+              <h4 class="font-bold text-slate-800">Trigger GPS Streaming</h4>
+              <p class="text-slate-500 text-xs mt-1">Once the driver triggers the active trip start flow, configure the
+                driver device's location service to send coordinate updates via the <code
+                  class="bg-slate-100 px-1 py-0.5 text-indigo-600 rounded">emitTelemetryUpdate</code> event every 5
+                seconds.</p>
+            </div>
+            <!-- Step 3 -->
+            <div class="relative">
+              <div
+                class="absolute -left-11 top-0.5 h-6 w-6 rounded-full bg-indigo-600 border-4 border-white shadow-sm flex items-center justify-center text-[10px] font-bold text-white">
+                3</div>
+              <h4 class="font-bold text-slate-800">Bind Map Render Event</h4>
+              <p class="text-slate-500 text-xs mt-1">On the passenger app side, subscribe to the <code
+                  class="bg-slate-100 px-1 py-0.5 text-indigo-600 rounded">telemetryUpdate</code> socket event. Update
+                the map marker position immediately on coordinates update.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: End-to-End Ride Lifecycle Flow -->
+      <section id="ride-lifecycle" class="space-y-6">
+        <div class="border-b border-slate-200 pb-4">
+          <h3 class="text-2xl font-bold tracking-tight text-slate-900">5. End-to-End Ride Lifecycle & API/Socket Flow
+          </h3>
+          <p class="text-slate-500 text-xs mt-1">Complete sequencing of client-server integrations from ride request to
+            trip completion</p>
+        </div>
+
+        <div
+          class="space-y-8 relative before:absolute before:inset-0 before:left-[17px] before:w-0.5 before:bg-slate-200">
+
+          <!-- Step 1: Request Fare Estimate -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-indigo-50 border-2 border-indigo-600 flex items-center justify-center text-xs font-bold text-indigo-600 shadow-sm">
+              1</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">POST</span>
+                <span class="font-mono font-bold text-slate-800 text-sm">/api/v1/transportation/requests/estimate</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Passenger App: Request Fare Estimate</h4>
+              <p class="text-slate-500 text-xs mt-0.5">Passenger selects pickup and drop-off points. The app queries
+                pricing and distance estimation.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "vehicleCategoryId": "vcat_S4fIR4U92p6...",
+  "pickupLat": 12.9716,
+  "pickupLng": 77.5946,
+  "dropLat": 12.9000,
+  "dropLng": 77.6000
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Fare estimation calculated successfully",
+  "data": {
+    "estimatedDistanceKm": 8.5,
+    "estimatedDurationMin": 22,
+    "baseFare": 100,
+    "perKmRate": 15,
+    "minimumFare": 120,
+    "estimatedTotalFare": 227.5
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Book Ride -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-indigo-50 border-2 border-indigo-600 flex items-center justify-center text-xs font-bold text-indigo-600 shadow-sm">
+              2</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">POST</span>
+                <span class="font-mono font-bold text-slate-800 text-sm">/api/v1/transportation/vehicle/bookings</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Passenger App: Create Booking Request</h4>
+              <p class="text-slate-500 text-xs mt-0.5">Passenger confirms booking. The booking enters status
+                <code>REQUESTED</code>. The system automatically searches for nearby available drivers within a 10km
+                radius.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "emergencyType": "CARDIAC",
+  "pickupAddress": "123 Main St, Bangalore",
+  "pickupLat": 12.9716,
+  "pickupLng": 77.5946,
+  "dropAddress": "456 Hospital Road, Bangalore",
+  "dropLat": 12.9000,
+  "dropLng": 77.6000,
+  "numberOfPatients": 1
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (201 Created)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Ride booking request created successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92p6SEc_XBx...",
+    "rideBookingId": "abk_uK43ypkGAacO...",
+    "status": "REQUESTED",
+    "vehicleAssigned": false,
+    "emergencyType": "CARDIAC",
+    "numberOfPatients": 1,
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Broadcast New Ride Socket -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-amber-50 border-2 border-amber-500 flex items-center justify-center text-xs font-bold text-amber-600 shadow-sm">
+              3</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">SOCKET
+                  BROADCAST</span>
+                <span class="font-mono font-bold text-slate-800 text-sm">newRideRequest</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Socket Server: Alert Nearby Online Drivers</h4>
+              <p class="text-slate-500 text-xs mt-0.5">The Socket.IO server pushes booking details to the private socket
+                room of each online driver (<code>driver_room:&lt;driverPublicId&gt;</code>). Note that drivers must
+                connect using query handshake credentials to establish their room subscription.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Driver Socket.IO Connection
+                  Setup</span>
+                <pre class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">// Driver must connect passing their encrypted driverId
+const socket = io("http://localhost:5000", {
+  query: {
+    driverId: "drv_WtA2bsgxL5enW2136A9sezEc..."
+  }
+});</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Broadcast Payload Received by
+                  Driver</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "bookingId": "bkm_S4fIR4U92p6SEc_XBx...",
+  "pickupAddress": "123 Main St, Bangalore",
+  "pickupLat": 12.9716,
+  "pickupLng": 77.5946,
+  "dropAddress": "456 Hospital Road, Bangalore",
+  "dropLat": 12.9000,
+  "dropLng": 77.6000,
+  "numberOfPatients": 1,
+  "notes": null
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Accept Ride Request -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-indigo-50 border-2 border-indigo-600 flex items-center justify-center text-xs font-bold text-indigo-600 shadow-sm">
+              4</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">POST</span>
+                <span
+                  class="font-mono font-bold text-slate-800 text-sm">/api/v1/transportation/vehicle/bookings/:bookingId/accept</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Driver App: Accept the Booking</h4>
+              <p class="text-slate-500 text-xs mt-0.5">The driver accepts the dispatch. The backend locks the status to
+                <code>ACCEPTED</code>, assigns driver/vehicle, sets up telemetry rooms, and updates driver's status to
+                <code>ON_TRIP</code>.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Details</span>
+                <pre
+                  class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">bookingId: "bkm_S4fIR4U92p6SEc_XBx..."</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Booking accepted successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4...",
+    "rideBookingId": "abk_uK43...",
+    "status": "ACCEPTED",
+    "vehicleAssigned": true,
+    "vehicle": {
+      "id": "amb_S4fIR4...",
+      "publicId": "amb_S4fIR4...",
+      "vehicleNumber": "KA-01-AB-1234",
+      "vehicleType": "BASIC",
+      "registrationNumber": "KA-01-AB-1234"
+    },
+    "driver": {
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "estimatedArrivalMinutes": 15,
+    "assignedAt": "2026-06-08T11:00:00.000Z",
+    "extendedCount": 0,
+    "startedAt": null,
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5: Subscribe Telemetry -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-amber-50 border-2 border-amber-500 flex items-center justify-center text-xs font-bold text-amber-600 shadow-sm">
+              5</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">SOCKET
+                  EMIT</span>
+                <span class="font-mono font-bold text-slate-800 text-sm">subscribeTripRoom</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Passenger App: Join Trip Telemetry Room</h4>
+              <p class="text-slate-500 text-xs mt-0.5">Upon receiving confirmation of driver acceptance, the passenger
+                app joins the telemetry stream room by emitting the <code>subscribeTripRoom</code> event with the
+                encrypted <code>tripId</code>.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Passenger App Subscription Code</span>
+                <pre class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">// 1. Connect to general socket
+const socket = io("http://localhost:5000");
+
+// 2. Subscribe to the trip telemetry room
+socket.emit("subscribeTripRoom", {
+  "tripId": "bkm_S4fIR4U92p6SEc_XBx..." // Encrypted Booking Master ID
+});</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Subscribed Success Confirmation
+                  Listener</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">// Listener to verify room assignment
+socket.on("subscribed", (status) => {
+  console.log("Joined room:", status.room); // trip_room:bkm_S4fIR4U92...
+  console.log("Success:", status.success); // true
+});</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 6: Verify OTP / Start Trip -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-indigo-50 border-2 border-indigo-600 flex items-center justify-center text-xs font-bold text-indigo-600 shadow-sm">
+              6</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">POST</span>
+                <span
+                  class="font-mono font-bold text-slate-800 text-sm">/api/v1/transportation/vehicle/bookings/:bookingId/verify</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Driver App: Verify Passenger OTP (Starts Trip)</h4>
+              <p class="text-slate-500 text-xs mt-0.5">Driver meets the passenger, collects the 6-digit OTP code, and
+                completes verification. Booking changes to <code>IN_PROGRESS</code> and the active trip officially
+                starts.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "verificationCode": "123456"
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Booking verified successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4...",
+    "rideBookingId": "abk_uK43...",
+    "status": "IN_PROGRESS",
+    "vehicleAssigned": true,
+    "vehicle": {
+      "id": "amb_S4fIR4...",
+      "publicId": "amb_S4fIR4...",
+      "vehicleNumber": "KA-01-AB-1234",
+      "vehicleType": "BASIC",
+      "registrationNumber": "KA-01-AB-1234"
+    },
+    "driver": {
+      "name": "John Doe",
+      "phone": "+919999999999"
+    },
+    "pickupAddress": "123 Main St, Bangalore",
+    "dropAddress": "456 Hospital Road, Bangalore",
+    "estimatedArrivalMinutes": 15,
+    "assignedAt": "2026-06-08T11:00:00.000Z",
+    "extendedCount": 0,
+    "startedAt": "2026-06-08T11:05:00.000Z",
+    "createdAt": "2026-06-08T11:00:00.000Z"
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 7: Telemetry Updates -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-amber-50 border-2 border-amber-500 flex items-center justify-center text-xs font-bold text-amber-600 shadow-sm">
+              7</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">SOCKET
+                  STREAM</span>
+                <span class="font-mono font-bold text-slate-800 text-sm">emitTelemetryUpdate &rarr;
+                  telemetryUpdate</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Driver to Passenger: Live Coordinates Tracking (Every
+                5s)</h4>
+              <p class="text-slate-500 text-xs mt-0.5">The driver app emits GPS telemetry. The socket server updates
+                low-latency caches and broadcasts coordinates to passengers listening to the trip room.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">1. Driver App Emit
+                  (emitTelemetryUpdate)</span>
+                <pre class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "driverId": "drv_WtA2bsgxL5enW2136A9sezEc...",
+  "tripId": "bkm_S4fIR4U92p6SEc_XBx...",
+  "lat": 12.9716,
+  "lng": 77.5946
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">2. Passenger App Listen
+                  (telemetryUpdate)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "driverId": "drv_WtA2bsgxL5enW2136A9sezEc...",
+  "tripId": "bkm_S4fIR4U92p6SEc_XBx...",
+  "latitude": 12.9716,
+  "longitude": 77.5946,
+  "timestamp": "2026-06-18T11:10:00.000Z"
+}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 8: Complete Ride -->
+          <div class="relative pl-10 space-y-3">
+            <div
+              class="absolute left-0 top-1.5 h-9 w-9 rounded-full bg-indigo-50 border-2 border-indigo-600 flex items-center justify-center text-xs font-bold text-indigo-600 shadow-sm">
+              8</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="bg-blue-500 text-white font-bold px-2 py-0.5 rounded text-[10px] uppercase">POST</span>
+                <span
+                  class="font-mono font-bold text-slate-800 text-sm">/api/v1/transportation/trips/:bookingId/complete</span>
+              </div>
+              <h4 class="font-bold text-slate-800 text-sm mt-1">Driver App: Complete Trip & Generate Invoice</h4>
+              <p class="text-slate-500 text-xs mt-0.5">Upon reaching the hospital destination, the driver submits final
+                ride metrics. Status updates to <code>COMPLETED</code>, and the backend clears the vehicle assignment.
+              </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Payload</span>
+                <pre class="bg-slate-900 text-indigo-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "actualDistanceKm": 8.5,
+  "actualDurationMin": 22
+}</pre>
+              </div>
+              <div>
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Response (200 OK)</span>
+                <pre class="bg-slate-900 text-emerald-300 p-3 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Trip completed successfully",
+  "data": {
+    "bookingId": "bkm_S4fIR4U92...",
+    "rideBookingId": "abk_uK43yp...",
+    "status": "COMPLETED",
+    "startedAt": "2026-06-08T11:05:00.000Z",
+    "completedAt": "2026-06-08T11:27:00.000Z",
+    "actualDistanceKm": 8.5,
+    "actualDurationMin": 22,
+    "fareBreakdown": {
+      "baseFare": 100,
+      "perKmRate": 15,
+      "minimumFare": 120,
+      "totalFare": 227.5,
+      "commissionAmount": 0.0,
+      "driverEarning": 227.5
+    }
+  }
+}</pre>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section: Testing / No-Auth Mode -->
+      <section id="testing-no-auth" class="space-y-6">
+        <div class="border-b border-amber-200 pb-4">
+          <div class="flex items-center gap-3 mb-1">
+            <span
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-300 uppercase tracking-wider">
+              <i class="fa-solid fa-flask text-xs"></i> Dev / Testing Only
+            </span>
+          </div>
+          <h3 class="text-2xl font-bold tracking-tight text-slate-900">Testing — No-Auth Mode</h3>
+          <p class="text-slate-500 text-xs mt-1">All transportation routes are temporarily open (no token required).
+            This section explains how identity is resolved per endpoint during testing.</p>
+        </div>
+
+        <!-- Warning banner -->
+        <div class="bg-amber-50 border border-amber-300 rounded-2xl p-5 flex gap-4 items-start shadow-sm">
+          <div class="h-9 w-9 flex-shrink-0 bg-amber-400 rounded-xl flex items-center justify-center text-white">
+            <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+          </div>
+          <div>
+            <p class="font-bold text-amber-800 text-sm">Production Warning</p>
+            <p class="text-amber-700 text-xs mt-0.5 leading-relaxed">The <code
+                class="bg-amber-100 px-1 rounded">authenticate</code> middleware and all <code
+                class="bg-amber-100 px-1 rounded">authorize()</code> role guards have been disabled in <code
+                class="bg-amber-100 px-1 rounded">transportation.routes.ts</code>. Internal <code
+                class="bg-amber-100 px-1 rounded">if (!req.user)</code> checks in the controller have been replaced with
+              graceful fallbacks. <strong>Re-enable both before deploying to production.</strong></p>
+          </div>
+        </div>
+
+        <!-- What was changed -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+          <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wider">What Was Disabled</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="h-5 w-5 bg-red-100 text-red-600 rounded flex items-center justify-center text-[10px]"><i
+                    class="fa-solid fa-ban"></i></span>
+                <span class="font-semibold text-slate-700">transportation.routes.ts</span>
+              </div>
+              <pre class="bg-slate-900 text-red-400 p-3 rounded-lg overflow-x-auto custom-scroll text-[11px]">// Removed global auth:
+// router.use(authenticate);
+
+// Removed role guards, e.g:
+// authorize(UserRole.USER)
+// authorize(UserRole.DRIVER)
+// authorize(UserRole.SUPER_ADMIN, UserRole.ORG_ADMIN)</pre>
+            </div>
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="h-5 w-5 bg-red-100 text-red-600 rounded flex items-center justify-center text-[10px]"><i
+                    class="fa-solid fa-ban"></i></span>
+                <span class="font-semibold text-slate-700">transportation.controller.ts</span>
+              </div>
+              <pre class="bg-slate-900 text-red-400 p-3 rounded-lg overflow-x-auto custom-scroll text-[11px]">// Removed hard checks like:
+// if (!req.user) {
+//   throw new AppError(
+//     'Authentication required',
+//     HTTP_STATUS.UNAUTHORIZED
+//   );
+// }</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- UserId Resolution -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+          <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Identity Resolution — How <code
+              class="font-mono text-indigo-600">userId</code> Is Picked</h4>
+          <p class="text-slate-500 text-xs">When no token is present, the controller resolves identity using a
+            <strong>priority chain</strong>. There are two separate chains — one for regular users and one for drivers.
+          </p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- User chain -->
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="bg-sky-100 text-sky-700 font-bold px-2 py-0.5 rounded text-[10px] uppercase">Frontend
+                  User</span>
+              </div>
+              <pre class="bg-slate-900 text-sky-300 p-4 rounded-xl overflow-x-auto custom-scroll text-[11px]">const userId =
+  req.user?.userId       // 1. Real token (production)
+  ?? req.body.userId     // 2. Pass in body for testing
+  ?? 'TEST_USER_ID';     // 3. Auto fallback</pre>
+              <p class="text-slate-400 text-[11px]">Used by: <code>createBooking</code>,
+                <code>createTransportationRequest</code>, <code>getUnifiedBookings</code>, <code>cancelRequest</code>,
+                <code>verifyBooking</code>, <code>extendBooking</code></p>
+            </div>
+            <!-- Driver chain -->
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <span
+                  class="bg-violet-100 text-violet-700 font-bold px-2 py-0.5 rounded text-[10px] uppercase">Driver</span>
+              </div>
+              <pre class="bg-slate-900 text-violet-300 p-4 rounded-xl overflow-x-auto custom-scroll text-[11px]">const userId =
+  req.user?.userId       // 1. Real token (production)
+  ?? req.body.driverId   // 2. Pass driverId in body
+  ?? req.body.userId     // 3. Generic userId fallback
+  ?? 'TEST_DRIVER_ID';   // 4. Auto fallback</pre>
+              <p class="text-slate-400 text-[11px]">Used by: <code>acceptBooking</code>, <code>toggleDriverOnline</code>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Endpoint Override Table -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+          <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Per-Endpoint Override Reference</h4>
+          <p class="text-slate-500 text-xs">To test with a real database record, pass the override field in your
+            request. Omit it to use the generic fallback.</p>
+          <div class="overflow-x-auto custom-scroll">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Endpoint</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Method</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Role</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Override Field</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Auto Fallback</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/vehicle/bookings</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-emerald-100 text-emerald-700 font-bold px-1.5 rounded">POST</span></td>
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-semibold px-1.5 rounded">User</span>
+                  </td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">body.userId</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_USER_ID</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/requests</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-emerald-100 text-emerald-700 font-bold px-1.5 rounded">POST</span></td>
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-semibold px-1.5 rounded">User</span>
+                  </td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">body.userId</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_USER_ID</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/bookings</td>
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-bold px-1.5 rounded">GET</span></td>
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-semibold px-1.5 rounded">User</span>
+                  </td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">?userId=...</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_USER_ID</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/requests/:id/cancel</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-emerald-100 text-emerald-700 font-bold px-1.5 rounded">POST</span></td>
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-semibold px-1.5 rounded">User</span>
+                  </td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">body.userId</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_USER_ID</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/vehicle/bookings/:id/verify</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-emerald-100 text-emerald-700 font-bold px-1.5 rounded">POST</span></td>
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-semibold px-1.5 rounded">User</span>
+                  </td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">body.userId</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_USER_ID</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/vehicle/bookings/:id/extend</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-emerald-100 text-emerald-700 font-bold px-1.5 rounded">POST</span></td>
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-semibold px-1.5 rounded">User</span>
+                  </td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">body.userId</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_USER_ID</td>
+                </tr>
+                <tr class="hover:bg-slate-50 bg-violet-50/40">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/vehicle/bookings/:id/accept</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-emerald-100 text-emerald-700 font-bold px-1.5 rounded">POST</span></td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-violet-100 text-violet-700 font-semibold px-1.5 rounded">Driver</span></td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">body.driverId</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_DRIVER_ID</td>
+                </tr>
+                <tr class="hover:bg-slate-50 bg-violet-50/40">
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/drivers/online</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-orange-100 text-orange-700 font-bold px-1.5 rounded">PATCH</span></td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-violet-100 text-violet-700 font-semibold px-1.5 rounded">Driver</span></td>
+                  <td class="px-4 py-2.5 font-mono text-slate-600">body.driverId</td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">TEST_DRIVER_ID</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Example requests -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+          <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Example Test Requests (No Token)</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+            <div class="space-y-2">
+              <span class="text-[10px] font-semibold text-slate-400 uppercase">User — Create Booking (specific
+                user)</span>
+              <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl overflow-x-auto custom-scroll">POST /api/transportation/vehicle/bookings
+Content-Type: application/json
+
+{
+  "userId": "usr_abc123",
+  "pickupLocation": { "lat": 28.6139, "lng": 77.2090 },
+  "dropLocation":  { "lat": 28.7041, "lng": 77.1025 },
+  "vehicleCategoryId": "vc_ambulance",
+  "emergencyType": "MEDICAL"
+}</pre>
+            </div>
+            <div class="space-y-2">
+              <span class="text-[10px] font-semibold text-slate-400 uppercase">Driver — Accept Booking (specific
+                driver)</span>
+              <pre class="bg-slate-900 text-violet-300 p-4 rounded-xl overflow-x-auto custom-scroll">POST /api/transportation/vehicle/bookings/:bookingId/accept
+Content-Type: application/json
+
+{
+  "driverId": "drv_xyz789"
+}</pre>
+            </div>
+            <div class="space-y-2">
+              <span class="text-[10px] font-semibold text-slate-400 uppercase">Driver — Toggle Online Status</span>
+              <pre class="bg-slate-900 text-violet-300 p-4 rounded-xl overflow-x-auto custom-scroll">PATCH /api/transportation/drivers/online
+Content-Type: application/json
+
+{
+  "driverId": "drv_xyz789",
+  "isOnline": true
+}</pre>
+            </div>
+            <div class="space-y-2">
+              <span class="text-[10px] font-semibold text-slate-400 uppercase">User — Generic Fallback (no userId
+                needed)</span>
+              <pre class="bg-slate-900 text-sky-300 p-4 rounded-xl overflow-x-auto custom-scroll">POST /api/transportation/requests/estimate
+Content-Type: application/json
+
+// No userId or token required
+// (this endpoint never needed one)
+{
+  "pickupLocation": { "lat": 28.6139, "lng": 77.2090 },
+  "dropLocation":  { "lat": 28.7041, "lng": 77.1025 },
+  "vehicleCategoryId": "vc_ambulance"
+}</pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Restore checklist -->
+        <div class="bg-red-50 border border-red-200 rounded-2xl p-5 shadow-sm space-y-3">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-circle-check text-red-400"></i>
+            <h4 class="font-bold text-red-800 text-sm">Before Going to Production — Restore Checklist</h4>
+          </div>
+          <ul class="space-y-2 text-xs text-red-700">
+            <li class="flex items-start gap-2"><i class="fa-regular fa-square mt-0.5 text-red-400"></i> Uncomment <code
+                class="bg-red-100 px-1 rounded">router.use(authenticate)</code> in
+              <strong>transportation.routes.ts</strong></li>
+            <li class="flex items-start gap-2"><i class="fa-regular fa-square mt-0.5 text-red-400"></i> Restore <code
+                class="bg-red-100 px-1 rounded">authorize(UserRole.*)</code> guards on every role-protected route</li>
+            <li class="flex items-start gap-2"><i class="fa-regular fa-square mt-0.5 text-red-400"></i> Replace fallback
+              chains in controller back to hard <code class="bg-red-100 px-1 rounded">if (!req.user)</code> throws</li>
+            <li class="flex items-start gap-2"><i class="fa-regular fa-square mt-0.5 text-red-400"></i> Re-enable
+              imports: <code class="bg-red-100 px-1 rounded">authenticate</code>, <code
+                class="bg-red-100 px-1 rounded">authorize</code>, <code class="bg-red-100 px-1 rounded">UserRole</code>
+            </li>
+          </ul>
+        </div>
+
+      </section>
+
+      <!-- Section: Patient API -->
+      <section id="patient-api" class="space-y-6">
+        <div class="border-b border-slate-200 pb-4">
+          <div class="flex items-center gap-3 mb-1">
+            <span
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-300 uppercase tracking-wider">
+              <i class="fa-solid fa-flask text-xs"></i> Testing / No-Auth
+            </span>
+          </div>
+          <h3 class="text-2xl font-bold tracking-tight text-slate-900">Patient API</h3>
+          <p class="text-slate-500 text-xs mt-1">Manage patients and family members. Base path: <code
+              class="bg-slate-100 px-1.5 py-0.5 rounded font-mono text-indigo-600">/api/v1/patients</code> &nbsp;|&nbsp;
+            <span class="text-amber-600 font-semibold">Auth disabled for testing</span> &mdash; no token required. Pass
+            <code class="bg-slate-100 px-1 rounded font-mono">?userId=&lt;id&gt;</code> or <code
+              class="bg-slate-100 px-1 rounded font-mono">body.userId</code> to target a specific user, or omit for
+            fallback user ID <code class="bg-slate-100 px-1 rounded font-mono">1</code>.</p>
+        </div>
+
+        <!-- Endpoint 1: GET /patients -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100 bg-slate-50/60">
+            <span class="bg-sky-500 text-white font-bold px-2.5 py-1 rounded-lg text-xs">GET</span>
+            <code class="font-mono font-semibold text-slate-800 text-sm">/api/v1/patients</code>
+            <span class="ml-auto text-xs text-slate-400 font-medium">List all patients</span>
+          </div>
+          <div class="p-6 space-y-4">
+            <p class="text-slate-500 text-xs leading-relaxed">Returns the logged-in user as <code>SELF</code> plus all
+              their family members. Auto-creates a <code>SELF</code> patient record if one does not exist yet. Use this
+              list to populate the "Select Patient" screen before booking.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request (no token needed)</span>
+                <pre class="bg-slate-900 text-sky-300 p-4 rounded-xl overflow-x-auto custom-scroll">GET /api/v1/patients
+// No token required
+
+// To target a specific user:
+GET /api/v1/patients?userId=42</pre>
+              </div>
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">200 OK — Response</span>
+                <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Patients retrieved successfully",
+  "data": [
+    {
+      "id": "enc_XyZabc123...",
+      "name": "John Doe",
+      "age": 30,
+      "gender": "MALE",
+      "relationship": "SELF"
+    },
+    {
+      "id": "enc_Def456...",
+      "name": "Anita Kumar",
+      "age": 10,
+      "gender": "FEMALE",
+      "relationship": "CHILD"
+    }
+  ]
+}</pre>
+              </div>
+            </div>
+
+            <div class="bg-sky-50 border border-sky-200 rounded-xl p-3 text-xs text-sky-700">
+              <i class="fa-solid fa-circle-info mr-1"></i>
+              The <code>id</code> returned is an <strong>encrypted public ID</strong>. Use it as-is in subsequent API
+              calls — do not attempt to decode it.
+            </div>
+          </div>
+        </div>
+
+        <!-- Endpoint 2: POST /patients -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100 bg-slate-50/60">
+            <span class="bg-emerald-500 text-white font-bold px-2.5 py-1 rounded-lg text-xs">POST</span>
+            <code class="font-mono font-semibold text-slate-800 text-sm">/api/v1/patients</code>
+            <span class="ml-auto text-xs text-slate-400 font-medium">Add a family member</span>
+          </div>
+          <div class="p-6 space-y-5">
+            <p class="text-slate-500 text-xs leading-relaxed">Creates a new family member linked to the logged-in user.
+              <code>SELF</code> relation is not allowed. Rejects duplicates with the same
+              <code>firstName + lastName + relation</code> combination. Returns the created record with profile
+              completeness status.</p>
+
+            <!-- Field table -->
+            <div class="overflow-x-auto custom-scroll">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Field</th>
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Type</th>
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Required</th>
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Description</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">firstName</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-red-100 text-red-600 font-bold px-1.5 rounded text-[10px]">YES</span></td>
+                    <td class="px-4 py-2.5 text-slate-500">First name of the family member</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">lastName</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-red-100 text-red-600 font-bold px-1.5 rounded text-[10px]">YES</span></td>
+                    <td class="px-4 py-2.5 text-slate-500">Last name of the family member</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">relation</td>
+                    <td class="px-4 py-2.5 text-slate-500">enum</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-red-100 text-red-600 font-bold px-1.5 rounded text-[10px]">YES</span></td>
+                    <td class="px-4 py-2.5 text-slate-500"><code>SPOUSE</code> | <code>CHILD</code> |
+                      <code>PARENT</code> | <code>SIBLING</code></td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">dateOfBirth</td>
+                    <td class="px-4 py-2.5 text-slate-500">string (date)</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-slate-100 text-slate-500 font-semibold px-1.5 rounded text-[10px]">optional</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-slate-500">Format: <code>YYYY-MM-DD</code>. Auto-calculates age.</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">age</td>
+                    <td class="px-4 py-2.5 text-slate-500">integer</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-slate-100 text-slate-500 font-semibold px-1.5 rounded text-[10px]">optional</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-slate-500">Age in years. Use instead of dateOfBirth if exact DOB
+                      unknown.</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">gender</td>
+                    <td class="px-4 py-2.5 text-slate-500">enum</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-slate-100 text-slate-500 font-semibold px-1.5 rounded text-[10px]">optional</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-slate-500"><code>MALE</code> | <code>FEMALE</code> | <code>OTHER</code>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">bloodGroup</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-slate-100 text-slate-500 font-semibold px-1.5 rounded text-[10px]">optional</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-slate-500">e.g. <code>A+</code>, <code>O-</code>, <code>B+</code></td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">mobileNumber</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5"><span
+                        class="bg-slate-100 text-slate-500 font-semibold px-1.5 rounded text-[10px]">optional</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-slate-500">10-digit mobile number</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Body (minimal)</span>
+                <pre class="bg-slate-900 text-sky-300 p-4 rounded-xl overflow-x-auto custom-scroll">POST /api/v1/patients
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  "firstName": "Anita",
+  "lastName": "Kumar",
+  "relation": "CHILD"
+}</pre>
+              </div>
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Body (full)</span>
+                <pre class="bg-slate-900 text-sky-300 p-4 rounded-xl overflow-x-auto custom-scroll">POST /api/v1/patients
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  "firstName": "Anita",
+  "lastName": "Kumar",
+  "relation": "CHILD",
+  "dateOfBirth": "2015-06-15",
+  "gender": "FEMALE",
+  "bloodGroup": "A+",
+  "mobileNumber": "9876543210"
+}</pre>
+              </div>
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">201 Created — Response</span>
+                <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Family member added successfully",
+  "data": {
+    "id": "enc_XyZ789...",
+    "name": "Anita Kumar",
+    "age": 10,
+    "gender": "FEMALE",
+    "relationship": "CHILD",
+    "bloodGroup": "A+",
+    "mobileNumber": "9876543210",
+    "dateOfBirth": "2015-06-15",
+    "profile_status": "COMPLETE",
+    "missing_fields": []
+  }
+}</pre>
+              </div>
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Error Responses</span>
+                <pre class="bg-slate-900 text-red-400 p-4 rounded-xl overflow-x-auto custom-scroll">// 400 — Missing required field
+{ "success": false,
+  "message": "firstName, lastName, and relation are required" }
+
+// 400 — Invalid relation
+{ "success": false,
+  "message": "Relation must be one of: SPOUSE, CHILD, PARENT, SIBLING" }
+
+// 409 — Duplicate
+{ "success": false,
+  "message": "A family member with the same name and relation already exists" }
+
+// 401 — No token
+{ "success": false,
+  "message": "Unauthorized" }</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Endpoint 3: GET /patients/:id/completeness -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100 bg-slate-50/60">
+            <span class="bg-sky-500 text-white font-bold px-2.5 py-1 rounded-lg text-xs">GET</span>
+            <code class="font-mono font-semibold text-slate-800 text-sm">/api/v1/patients/:id/completeness</code>
+            <span class="ml-auto text-xs text-slate-400 font-medium">Check profile completeness</span>
+          </div>
+          <div class="p-6 space-y-4">
+            <p class="text-slate-500 text-xs leading-relaxed">Returns the profile completeness status of a specific
+              patient before confirming a booking. The required fields for a <code>COMPLETE</code> status are:
+              <code>firstName</code>, <code>lastName</code>, <code>age</code> (or <code>dateOfBirth</code>),
+              <code>bloodGroup</code>, <code>mobileNumber</code>, and <code>relation</code>.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request</span>
+                <pre class="bg-slate-900 text-sky-300 p-4 rounded-xl overflow-x-auto custom-scroll">GET /api/v1/patients/enc_XyZ789.../completeness
+Authorization: Bearer &lt;token&gt;</pre>
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-700">
+                  <i class="fa-solid fa-key mr-1"></i>
+                  <code>:id</code> is the encrypted patient ID from the <code>GET /patients</code> response.
+                </div>
+              </div>
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">200 OK — Response</span>
+                <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Patient completeness retrieved successfully",
+  "data": {
+    "id": "enc_XyZ789...",
+    "name": "Anita Kumar",
+    "relationship": "CHILD",
+    "profile_status": "INCOMPLETE",
+    "missing_fields": ["bloodGroup", "mobileNumber"],
+    "fields": {
+      "firstName": "Anita",
+      "lastName": "Kumar",
+      "age": 10,
+      "dateOfBirth": "2015-06-15",
+      "bloodGroup": null,
+      "mobileNumber": null,
+      "relation": "CHILD"
+    }
+  }
+}</pre>
+              </div>
+            </div>
+
+            <!-- Profile status legend -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              <div class="flex items-start gap-2 bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                <span
+                  class="h-5 w-5 mt-0.5 bg-emerald-500 text-white rounded flex items-center justify-center flex-shrink-0"><i
+                    class="fa-solid fa-check text-[10px]"></i></span>
+                <div>
+                  <p class="font-bold text-emerald-700">COMPLETE</p>
+                  <p class="text-emerald-600 mt-0.5">All required fields are present. Patient is ready for booking.</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-2 bg-red-50 border border-red-200 rounded-xl p-3">
+                <span
+                  class="h-5 w-5 mt-0.5 bg-red-400 text-white rounded flex items-center justify-center flex-shrink-0"><i
+                    class="fa-solid fa-xmark text-[10px]"></i></span>
+                <div>
+                  <p class="font-bold text-red-700">INCOMPLETE</p>
+                  <p class="text-red-600 mt-0.5">One or more required fields are missing. Use
+                    <code>PATCH /patients/:id</code> to fill them before booking.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Endpoint 4: PATCH /patients/:id -->
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+          <div class="flex items-center gap-3 px-6 py-4 border-b border-slate-100 bg-slate-50/60">
+            <span class="bg-orange-500 text-white font-bold px-2.5 py-1 rounded-lg text-xs">PATCH</span>
+            <code class="font-mono font-semibold text-slate-800 text-sm">/api/v1/patients/:id</code>
+            <span class="ml-auto text-xs text-slate-400 font-medium">Update patient profile</span>
+          </div>
+          <div class="p-6 space-y-5">
+            <p class="text-slate-500 text-xs leading-relaxed">Partially updates a patient's profile. Only the provided
+              fields are updated — omit any field you don't want to change. Updates both the <code>FamilyMember</code>
+              and <code>Patient</code> database records in a single transaction. Returns the full updated profile with
+              completeness status.</p>
+
+            <div class="overflow-x-auto custom-scroll">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200">
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Field</th>
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Type</th>
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Updates</th>
+                    <th class="px-4 py-2.5 font-semibold text-slate-600">Notes</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">firstName</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5 text-slate-500">FamilyMember + Patient.name</td>
+                    <td class="px-4 py-2.5 text-slate-500">Also updates the combined display name</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">lastName</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5 text-slate-500">FamilyMember + Patient.name</td>
+                    <td class="px-4 py-2.5 text-slate-500">Also updates the combined display name</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">age</td>
+                    <td class="px-4 py-2.5 text-slate-500">integer</td>
+                    <td class="px-4 py-2.5 text-slate-500">FamilyMember + Patient</td>
+                    <td class="px-4 py-2.5 text-slate-500">Stored on both records</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">dateOfBirth</td>
+                    <td class="px-4 py-2.5 text-slate-500">string (date)</td>
+                    <td class="px-4 py-2.5 text-slate-500">FamilyMember</td>
+                    <td class="px-4 py-2.5 text-slate-500">Auto-calculates and overwrites age in FamilyMember</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">bloodGroup</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5 text-slate-500">FamilyMember</td>
+                    <td class="px-4 py-2.5 text-slate-500">e.g. <code>O+</code>, <code>AB-</code></td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">mobileNumber</td>
+                    <td class="px-4 py-2.5 text-slate-500">string</td>
+                    <td class="px-4 py-2.5 text-slate-500">FamilyMember</td>
+                    <td class="px-4 py-2.5 text-slate-500">10-digit mobile number</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-2.5 font-mono text-indigo-600">gender</td>
+                    <td class="px-4 py-2.5 text-slate-500">enum</td>
+                    <td class="px-4 py-2.5 text-slate-500">Patient</td>
+                    <td class="px-4 py-2.5 text-slate-500"><code>MALE</code> | <code>FEMALE</code> | <code>OTHER</code>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">Request Body</span>
+                <pre class="bg-slate-900 text-sky-300 p-4 rounded-xl overflow-x-auto custom-scroll">PATCH /api/v1/patients/enc_XyZ789...
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+// Only send fields you want to update
+{
+  "bloodGroup": "A+",
+  "mobileNumber": "9876543210",
+  "dateOfBirth": "2015-06-15"
+}</pre>
+              </div>
+              <div class="space-y-2">
+                <span class="text-[10px] font-semibold text-slate-400 uppercase">200 OK — Response</span>
+                <pre class="bg-slate-900 text-emerald-300 p-4 rounded-xl overflow-x-auto custom-scroll">{
+  "success": true,
+  "message": "Patient profile updated successfully",
+  "data": {
+    "id": "enc_XyZ789...",
+    "name": "Anita Kumar",
+    "age": 10,
+    "gender": "FEMALE",
+    "relationship": "CHILD",
+    "bloodGroup": "A+",
+    "mobileNumber": "9876543210",
+    "dateOfBirth": "2015-06-15",
+    "profile_status": "COMPLETE",
+    "missing_fields": []
+  }
+}</pre>
+              </div>
+            </div>
+
+            <div class="bg-sky-50 border border-sky-200 rounded-xl p-3 text-xs text-sky-700">
+              <i class="fa-solid fa-circle-info mr-1"></i>
+              At least one field must be provided. Sending an empty body returns <code>400 Bad Request</code>.
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Reference Summary -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+          <h4 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Quick Reference — All Patient Endpoints
+          </h4>
+          <div class="overflow-x-auto custom-scroll">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200">
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Method</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Endpoint</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Description</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Auth</th>
+                  <th class="px-4 py-2.5 font-semibold text-slate-600">Success</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-bold px-1.5 rounded">GET</span></td>
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/api/v1/patients</td>
+                  <td class="px-4 py-2.5 text-slate-500">List user + family members</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-amber-100 text-amber-700 font-semibold px-1.5 rounded text-[10px]">Token</span></td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">200</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5"><span
+                      class="bg-emerald-100 text-emerald-700 font-bold px-1.5 rounded">POST</span></td>
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/api/v1/patients</td>
+                  <td class="px-4 py-2.5 text-slate-500">Add a family member</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-amber-100 text-amber-700 font-semibold px-1.5 rounded text-[10px]">Token</span></td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">201</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5"><span class="bg-sky-100 text-sky-700 font-bold px-1.5 rounded">GET</span></td>
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/api/v1/patients/:id/completeness</td>
+                  <td class="px-4 py-2.5 text-slate-500">Check booking readiness</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-amber-100 text-amber-700 font-semibold px-1.5 rounded text-[10px]">Token</span></td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">200</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="px-4 py-2.5"><span
+                      class="bg-orange-100 text-orange-700 font-bold px-1.5 rounded">PATCH</span></td>
+                  <td class="px-4 py-2.5 font-mono text-indigo-600">/api/v1/patients/:id</td>
+                  <td class="px-4 py-2.5 text-slate-500">Update patient profile fields</td>
+                  <td class="px-4 py-2.5"><span
+                      class="bg-amber-100 text-amber-700 font-semibold px-1.5 rounded text-[10px]">Token</span></td>
+                  <td class="px-4 py-2.5 font-mono text-slate-400">200</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="border-t border-slate-200 py-8 text-center text-xs text-slate-400 bg-white">
+    <p>&copy; 2026 HealthFleet. All rights reserved. Platform confidential information.</p>
+  </footer>
+
+</body>
+
+</html>
